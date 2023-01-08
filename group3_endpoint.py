@@ -3,6 +3,7 @@ from matplotlib.ticker import (MultipleLocator)
 import numpy as np
 #import group1, group2
 import material
+import argparse
 #The endpoint (Group 3) develops an API to collect data from user with argparse:
 #Latitude - in decimal degrees
 #Longitude - in decimal degrees
@@ -18,6 +19,17 @@ import material
 #pFCritical - 3.1
 #Next24Rain_treshold - 2
 #VPD_treshold - 0.5
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--inLat', type = float, required = True)
+parser.add_argument('--inLon', type = float, required = True)
+parser.add_argument('--inSoilType', type = float, required = True)
+parser.add_argument('--inpFCritical ', type = float, required = True)
+parser.add_argument('--invpd_treshold ', type = float, required = True)
+parser.add_argument('--innext24h_rain_treshold ', type = float, required = True)
+
+args = parser.parse_args()
 
 #Connect the dots
 # 1 -Organize your user input data for easier reading
