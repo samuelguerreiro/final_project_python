@@ -20,16 +20,25 @@ import argparse
 #Next24Rain_treshold - 2
 #VPD_treshold - 0.5
 
-parser = argparse.ArgumentParser()
-
-parser.add_argument('--inLat', type = float, required = True)
-parser.add_argument('--inLon', type = float, required = True)
-parser.add_argument('--inSoilType', type = float, required = True)
-parser.add_argument('--inpFCritical ', type = float, required = True)
-parser.add_argument('--invpd_treshold ', type = float, required = True)
-parser.add_argument('--innext24h_rain_treshold ', type = float, required = True)
-
-args = parser.parse_args()
+#Definition of the arguments of the script  
+parser = argparse.ArgumentParser(description= ' develops an API to collect data from user',exit_on_error=False)
+parser.add_argument('--latitude', type = float , help='provide the latitude')
+parser.add_argument('--longitude', type = float, help='provide the longitude')
+parser.add_argument('--soiltype', type = int, help='provide the Soiltype')
+parser.add_argument('--pFCritical', type = float, help='provide the soil tension from which there is plant specific stress')
+parser.add_argument('--Next24Rain_treshold', type = float, help='provide the the ammount of rain forecasted in the next 24h')
+parser.add_argument('--VPD_treshold', type = int, help='provide the Vapour Pressure Deficit')
+try:
+     args = parser.parse_args() 
+except argparse.ArgumentError:
+    print('Catching an argumentError')
+#Consider the group1 results
+inLat = material.Output1Group1['inlat']
+inLon = material.Output1Group1['inlon']
+inSoilType = group2.get_pF_forecast['inSoilType']
+inpFCritical  = group2.get_pF_forecast['inpFCritical']
+invpd_treshold = material.Output1Group1['invpd_treshold']
+innext24h_rain_treshold = material.Output1Group1['innext24h_rain_treshold']
 
 #Connect the dots
 # 1 -Organize your user input data for easier reading
