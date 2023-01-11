@@ -32,6 +32,7 @@ try:
      args = parser.parse_args() 
 except argparse.ArgumentError:
     print('Catching an argumentError')
+    
 #Consider the group1 results
 inLat = material.Output1Group1['inlat']
 inLon = material.Output1Group1['inlon']
