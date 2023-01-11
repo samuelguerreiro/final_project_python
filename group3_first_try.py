@@ -44,7 +44,7 @@ rh = material.Output1Group1['relativehumidity_2m'][:] # replace the empty list w
 ETo = [] # replace the empty list with result of group1 work
 precipitation = material.Output1Group1['precipitation'][:] # replace the empty list with result of group1 work
 SoilMoisture_3_9 = material.Output1Group1['soil_moisture_3_9cm'][:] # replace the empty list with result of group1 work
-SoilMoisture_9_27 = material.Output1Group1['soil_moisture_3_9cm'][:] # replace the empty list with result of group1 work
+SoilMoisture_9_27 = material.Output1Group1['soil_moisture_9_27cm'][:] # replace the empty list with result of group1 work
 # 4 Use group2 function to create the soil tension (pF) dataseries for the two soil layers. 
 pF_3_9= group2.soil_pF ['inpFCritical'] [:] # replace the empty list with result of group2 work
 pF_9_27=group2.soil_pF ['inpFCritical'] [:] # replace the empty list the list with result of group2 work
