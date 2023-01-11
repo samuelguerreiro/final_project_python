@@ -1,7 +1,7 @@
 import argparse
 import material
 import numpy as np
-import group2
+#import group2
 #Definition of the arguments of the script  
 parser = argparse.ArgumentParser(description= ' develops an API to collect data from user',exit_on_error=False)
 parser.add_argument('--latitude', type = float , help='provide the latitude')
@@ -15,8 +15,8 @@ try:
 except argparse.ArgumentError:
     print('Catching an argumentError')
 #Consider the group1 results
-inLat = material.Output1Group1['inlat']
-inLon = material.Output1Group1['inlon']
+inLat = material.Output1Group1['latitude']
+inLon = material.Output1Group1['longitude']
 inSoilType = group2.soil_pf ['inSoilType']
 inpFCritical  = group2.soil_pF['inpFCritical']
 invpd_treshold = material.Output1Group1['invpd_treshold']
