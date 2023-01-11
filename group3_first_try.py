@@ -1,7 +1,10 @@
+import matplotlib.pyplot as plt
+from matplotlib.ticker import (MultipleLocator)
 import argparse
 import material
+#import group1, group2
 import numpy as np
-#import group2
+
 #Definition of the arguments of the script  
 parser = argparse.ArgumentParser(description= ' develops an API to collect data from user',exit_on_error=False)
 parser.add_argument('--latitude', type = float , help='provide the latitude')
@@ -14,6 +17,7 @@ try:
      args = parser.parse_args() 
 except argparse.ArgumentError:
     print('Catching an argumentError')
+
 #Consider the group1 results
 inLat = material.Output1Group1['latitude']
 inLon = material.Output1Group1['longitude']
@@ -49,6 +53,7 @@ plan_3_9 = [0] * len(dates) # replace the empty list with a list with same nr el
 plan_9_27 = [0] * len(dates) # replace the empty list with a list with same nr elements as 'dates', but filled with zeros
 plan_3_9_dates = [] # leave as is. This list will store the irrigation event for this soil layer
 plan_9_27_dates = [] # leave as is. This list will store the irrigation event for this soil layer
+
 # Decision algorithm to trigger irrigation event - Improve if you feel it nees improvement
 # Rules: 1) soil tension is higher than pFCritical, 2) VPD is higher than vpd_treshold, 3) the sum of rain in the next 24 hours is less than 1 liter per m2
 for idx,i in enumerate(vpd):
@@ -61,3 +66,77 @@ for idx,i in enumerate(vpd):
          if sum(filter(None, plan_9_27))<1:
             plan_9_27[idx] = 1
             plan_9_27_dates.append(dates[idx])
+
+
+
+
+
+            # you don't want to worry about this section - only that it needs the variables
+###################################################### VISUALIZATION ################################################
+       
+fig, axs = plt.subplots(2,2,sharex=True)
+fig.suptitle('Green DS Master - Decision Support tool for irrigation needs. Current weather & soil retrieved from open-meteo.com\n'+
+             'Irrigation criteria: pF > ' + str(inpFCritical) + ", VPD > " + str(invpd_treshold)+ ", no rain next day that allows pF < " + str(pFCritical) + "\n"+
+             "Next irrigation event for early rooting (3-9cm):" + str(plan_3_9_dates[0]) + "\n"+
+             "Next irrigation event for established roots (9-27cm):" + str(plan_9_27_dates[0]) )
+fig.set_size_inches(12,5)
+axs[0,0].set_title('Temperature / VPD')
+axs[0,0].plot(dates, temp, color='orange', label='Temp')
+axs[0,0].set_ylabel('Celsius', color='orange')
+secax_0_0 = axs[0,0].twinx()  # instantiate a second axes that shares the same x-axis
+secax_0_0.plot(dates, vpd, color='blue')
+secax_0_0.set_ylabel('VPD (kPa)', color='blue')
+secax_0_0.fill_between(dates, vpd, invpd_treshold,  where=(np.array(vpd) >= np.array([invpd_treshold] * len(vpd))),
+                 alpha=0.30, color='blue', label='VPD > '+str(invpd_treshold))
+axs[0,0].legend(loc='upper left', frameon=False)
+
+axs[0,1].set_title('EvapoTranspiration/Rain/Rel Hum')
+axs[0,1].plot(dates, ETo, color='red',label='ETo')
+axs[0,1].bar(dates, precipitation, color='blue',label='Rain')
+axs[0,1].set_ylabel('ETo,Rain (mm)', color='black')
+axs[0,1].legend(loc='upper right', frameon=False)
+secax_0_1 = axs[0,1].twinx()  # instantiate a second axes that shares the same x-axis
+secax_0_1.plot(dates, rh, color='magenta',label='RH')
+secax_0_1.set_ylabel('Rel Hum (%)', color='magenta')
+secax_0_1.legend(loc='upper right', frameon=False)
+
+axs[1,0].set_title('Soil Moisture 3 to  9cm')
+axs[1,0].plot(dates, SoilMoisture_3_9 , color='black', label='Soil moisture (3-9)')
+secax_1_0 = axs[1,0].twinx()  # instantiate a second axes that shares the same x-axis
+secax_1_0.plot(dates, pF_3_9, color='orange',label='pF')
+secax_1_0.bar(dates, [x * inpFCritical for x in plan_3_9], color='red',label='Next irrigation', linewidth=3)
+secax_1_0.set_ylabel('pF log(-h)', color='orange')
+secax_1_0.tick_params(axis='y', colors='orange')
+secax_1_0.plot(dates, [inpFCritical] * len(dates), color='orange',label='Critical pF', linestyle='dashed')
+secax_1_0.set_ylim([min(pF_3_9)*0.97, max(pF_3_9)*1.03]) # just for scale purposes
+axs[1,0].set_ylabel('% vol', color='black')
+axs[1,0].legend(loc='upper right', frameon=False)
+
+
+
+axs[1,1].set_title('Soil Moisture, 9 to 27 cm')
+axs[1,1].plot(dates, SoilMoisture_9_27, color='black', label='Soil moisture (9-27)')
+axs[1,1].set_ylabel('% / % ', color='black')
+axs[1,1].legend(loc='upper right', frameon=False)
+secax_1_1 = axs[1,1].twinx()  # instantiate a second axes that shares the same x-axis
+secax_1_1 .plot(dates, pF_9_27, color='orange',label='pF')
+secax_1_1.set_ylabel('pF log(-h)', color='orange')
+secax_1_1 .plot(dates, [inpFCritical] * len(dates), color='orange',label='Critical pF', linestyle='dashed')
+secax_1_1.bar(dates, [x * inpFCritical for x in plan_9_27] , color='red',label='Next irrigation', linewidth=3)
+secax_1_1.set_ylim([min(pF_9_27)*0.97, max(pF_9_27)*1.03]) # just for scale purposes
+
+secax_1_1.legend(loc='upper left', frameon=False)
+
+axs[1,0].tick_params(axis='x', labelrotation=60)
+axs[1,0].xaxis.set_major_locator(MultipleLocator(12))
+axs[1,0].set_xlabel('DayHour')
+axs[1,1].tick_params(axis='x', labelrotation=60)
+axs[1,1].xaxis.set_major_locator(MultipleLocator(12))
+axs[1,1].set_xlabel('DayHour')
+
+# adding Label to the y-axis
+#plt.autoscale(enable=True, axis='both', tight=True)
+plt.tight_layout()
+# adding legend to the curves
+plt.legend()
+plt.show()
