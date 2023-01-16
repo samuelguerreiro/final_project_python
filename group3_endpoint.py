@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (MultipleLocator)
 import numpy as np
-#import group1, group2
+import group1, group2
 import material
 import argparse
 #The endpoint (Group 3) develops an API to collect data from user with argparse:
@@ -32,7 +32,7 @@ try:
      args = parser.parse_args() 
 except argparse.ArgumentError:
     print('Catching an argumentError')
-    
+
 #Consider the group1 results
 inLat = material.Output1Group1['inlat']
 inLon = material.Output1Group1['inlon']
