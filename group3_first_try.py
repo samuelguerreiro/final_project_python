@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (MultipleLocator)
 import argparse
-import material
-#import group1, group2
+#import material
+import group1_output #group2
 import numpy as np
 
 #Definition of the arguments of the script  
@@ -19,12 +19,13 @@ except argparse.ArgumentError:
     print('Catching an argumentError')
 
 #Consider the group1 results
-inLat = material.Output1Group1['latitude']
-inLon = material.Output1Group1['longitude']
+inLat = group1_output.Output1['latitude']
+inLon = group1_output.Output1['longitude']
 inSoilType = group2.soil_pf ['inSoilType']
 inpFCritical  = group2.soil_pF['inpFCritical']
-invpd_treshold = material.Output1Group1['invpd_treshold']
-innext24h_rain_treshold = material.Output1Group1['innext24h_rain_treshold']
+invpd_treshold = group1_output.Output1['invpd_treshold']
+innext24h_rain_treshold = group1_output.Output1['innext24h_rain_treshold']
+
 # 1 -Organize your user input data for easier reading
 inLat                     = 37.64 # replace this value with what you collect with your API
 inLon                     = -7.66 # replace this value with what you collect with your API
@@ -32,19 +33,21 @@ inSoilType                = 1 # replace this value with what you collect with yo
 inpFCritical              = 3.1 # replace this value with what you collect with your API
 invpd_treshold            = 0.5 # replace this value with what you collect with your API
 innext24h_rain_treshold   = 2 # replace this value with what you collect with your API
+
 # 2 - Create a dictionary of weather forecast with the group1 work. In the meantime you can use material.Output1Group1 as a mockup result
-Forecast = material.Output1Group1
+Forecast = group1_output.Output1
+
 # 3 - Organize your data series
 dates = Forecast['hourly']['time']
 dates = list(map(lambda x: x[-8:-3], dates))# just to get the Day and Hour
 #... continue to create the following lists and populate them with forecasted data
-temp = material.Output1Group1['temperature'] # replace the empty list with result of group1 work
+temp = group1_output.Output1['temperature'] # replace the empty list with result of group1 work
 vpd = [] # replace the empty list with result of group1 work
-rh = material.Output1Group1['relativehumidity_2m'][:] # replace the empty list with result of group1 work
+rh = group1_output.Output1 ['relativehumidity_2m'][:] # replace the empty list with result of group1 work
 ETo = [] # replace the empty list with result of group1 work
-precipitation = material.Output1Group1['precipitation'][:] # replace the empty list with result of group1 work
-SoilMoisture_3_9 = material.Output1Group1['soil_moisture_3_9cm'][:] # replace the empty list with result of group1 work
-SoilMoisture_9_27 = material.Output1Group1['soil_moisture_9_27cm'][:] # replace the empty list with result of group1 work
+precipitation = group1_output.Output1['precipitation'][:] # replace the empty list with result of group1 work
+SoilMoisture_3_9 = group1_output.Output1['soil_moisture_3_9cm'][:] # replace the empty list with result of group1 work
+SoilMoisture_9_27 = group1_output.Output1['soil_moisture_9_27cm'][:] # replace the empty list with result of group1 work
 # 4 Use group2 function to create the soil tension (pF) dataseries for the two soil layers. 
 pF_3_9= group2.soil_pF ['inpFCritical'] [:] # replace the empty list with result of group2 work
 pF_9_27=group2.soil_pF ['inpFCritical'] [:] # replace the empty list the list with result of group2 work
@@ -76,7 +79,7 @@ for idx,i in enumerate(vpd):
        
 fig, axs = plt.subplots(2,2,sharex=True)
 fig.suptitle('Green DS Master - Decision Support tool for irrigation needs. Current weather & soil retrieved from open-meteo.com\n'+
-             'Irrigation criteria: pF > ' + str(inpFCritical) + ", VPD > " + str(invpd_treshold)+ ", no rain next day that allows pF < " + str(pFCritical) + "\n"+
+             'Irrigation criteria: pF > ' + str(inpFCritical) + ", VPD > " + str(invpd_treshold)+ ", no rain next day that allows pF < " + str(inpFCritical) + "\n"+
              "Next irrigation event for early rooting (3-9cm):" + str(plan_3_9_dates[0]) + "\n"+
              "Next irrigation event for established roots (9-27cm):" + str(plan_9_27_dates[0]) )
 fig.set_size_inches(12,5)
