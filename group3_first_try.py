@@ -19,9 +19,9 @@ arguments = parser.parse_args()
 inLat                     = arguments.latitude # replace this value with what you collect with your API
 inLon                     = arguments.longitude # replace this value with what you collect with your API
 inSoilType                = arguments.soiltype # replace this value with what you collect with your API
-inpFCritical              = arguments.pFcritical # replace this value with what you collect with your API
+inpFCritical              = arguments.pFCritical # replace this value with what you collect with your API
 invpd_treshold            = arguments.VPD_treshold # replace this value with what you collect with your API
-innext24h_rain_treshold   = arguments.next24rain_treshold # replace this value with what you collect with your API
+innext24h_rain_treshold   = arguments.Next24Rain_treshold # replace this value with what you collect with your API
 
 try:
      args = parser.parse_args() 
