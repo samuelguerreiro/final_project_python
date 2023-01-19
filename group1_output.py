@@ -37,7 +37,9 @@ def getHourlyWeatherForescast(lat,lon):
 
 # use the builtin JSON decoder from requests library to create dictionary from the response (JSON data)
 
-    Output1 = json.resp()
+    Output1 = resp.json()
 
 # return the output
     return Output1
+
+#print(getHourlyWeatherForescast(52.52, 13.41))
