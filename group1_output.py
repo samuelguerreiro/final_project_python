@@ -42,4 +42,4 @@ def getHourlyWeatherForescast(lat,lon):
 # return the output
     return Output1
 
-#print(getHourlyWeatherForescast(52.52, 13.41))
+print(getHourlyWeatherForescast(52.52, 13.41))
