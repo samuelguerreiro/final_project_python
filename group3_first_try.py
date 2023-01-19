@@ -52,9 +52,9 @@ dates = Forecast['hourly']['time']
 dates = list(map(lambda x: x[-8:-3], dates))# just to get the Day and Hour
 #... continue to create the following lists and populate them with forecasted data
 temp = group1_output.Output1['temperature'] # replace the empty list with result of group1 work
-vpd = [] # replace the empty list with result of group1 work
+vpd = group1_output.Output1['vapor_pressure_deficit'] # replace the empty list with result of group1 work
 rh = group1_output.Output1 ['relativehumidity_2m'][:] # replace the empty list with result of group1 work
-ETo = [] # replace the empty list with result of group1 work
+ETo = group1_output.Output1 ['et0_fao_evapotranspiration'] # replace the empty list with result of group1 work
 precipitation = group1_output.Output1['precipitation'][:] # replace the empty list with result of group1 work
 SoilMoisture_3_9 = group1_output.Output1['soil_moisture_3_9cm'][:] # replace the empty list with result of group1 work
 SoilMoisture_9_27 = group1_output.Output1['soil_moisture_9_27cm'][:] # replace the empty list with result of group1 work
