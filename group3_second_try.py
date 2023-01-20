@@ -57,14 +57,14 @@ innext24h_rain_treshold   = arguments.next24rain_treshold # replace this value w
 
 # 2 - Create a dictionary of weather forecast with the group1 work. In the meantime you can use material.Output1Group1 as a mockup result
 Forecast = group1_output.getHourlyWeatherForescast(inLat,inLon) #(output 1 vai devolver o dicionário; em material.py está o output que é suposto o grupo 1 mobter, podem,os usalo))
-print (Forecast)
+#print (Forecast)
 
 # 3 - Organize your data series
 dates = Forecast['hourly']['time']
 dates = list(map(lambda x: x[-8:-3], dates))# just to get the Day and Hour
 #... continue to create the following lists and populate them with forecasted data
-temp = Forecast['temperature'] # replace the empty list with result of group1 work
-vpd = Forecast['vapor_pressure_deficit'] # replace the empty list with result of group1 work
+temp = Forecast['temperature'][:] # replace the empty list with result of group1 work
+vpd = Forecast['vapor_pressure_deficit'][:] # replace the empty list with result of group1 work
 rh = Forecast['relativehumidity_2m'][:] # replace the empty list with result of group1 work
 ETo = Forecast['et0_fao_evapotranspiration'] # replace the empty list with result of group1 work
 precipitation = Forecast['precipitation'][:] # replace the empty list with result of group1 work
