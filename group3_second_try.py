@@ -11,7 +11,7 @@ parser.add_argument ("latitude", type = float, metavar = "lat", help = "latitude
 parser.add_argument ("longitude", type = float, metavar = "lon", help = "longitude to analyse")
 parser.add_argument ("soiltype", type = int, metavar = "stype", help = "soil type to analyse")
 parser.add_argument ("pFCritical", type = float, metavar = "pF", help = "pF critical to analyse" )
-parser.add_argument ("next24rain_treshold", type = float, metavar = "24rain", help = "next24rain_treshold to analyse")
+parser.add_argument ("next24rain_treshold", type = float, metavar = "rain", help = "next24rain_treshold to analyse")
 parser.add_argument ("VPD_treshold", type = float, metavar = "VPD", help = "VPD_treshold to analyse")
 
 #The endpoint (Group 3) develops an API to collect data from user with argparse:
@@ -35,16 +35,16 @@ try:
 except argparse.ArgumentError:
     print('Catching an argumentError')
 
-inLat                     = arguments.latitude # replace this value with what you collect with your API
-inLon                     = arguments.longitude # replace this value with what you collect with your API
-inSoilType                = arguments.soiltype # replace this value with what you collect with your API
+inLat                     = arguments.lat # replace this value with what you collect with your API
+inLon                     = arguments.lon # replace this value with what you collect with your API
+inSoilType                = arguments.stype # replace this value with what you collect with your API
 if inSoilType < 1 and inSoilType > 5: #acrescentamos este if para que só corra se SoilType entre 1 e 5 (condição do enunciado)
     raise TypeError ("The soil type is not valid")
     exit()
 
-inpFCritical              = arguments.pFcritical # replace this value with what you collect with your API
-invpd_treshold            = arguments.VPD_treshold # replace this value with what you collect with your API
-innext24h_rain_treshold   = arguments.next24rain_treshold # replace this value with what you collect with your API
+inpFCritical              = arguments.pF # replace this value with what you collect with your API
+invpd_treshold            = arguments.VPD # replace this value with what you collect with your API
+innext24h_rain_treshold   = arguments.rain # replace this value with what you collect with your API
 
 
 # 1 -Organize your user input data for easier reading (isto é o que vem do imput)
