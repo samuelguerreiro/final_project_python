@@ -6,13 +6,13 @@ import argparse
 import group1_output
 #import group2_output #falta criar este ficheiro ainda (para a pergunta 4)
 
-parse = argparse.ArgumentParser (description = "insert data")
-parse.add_argument ("latitude", type = float, metavar = "lat", help = "latitude to analyse")
-parse.add_argument ("longitude", type = float, metavar = "lon", help = "longitude to analyse")
-parse.add_argument ("soiltype", type = int, metavar = "stype", help = "soil type to analyse")
-parse.add_argument ("pFCritical", type = float, metavar = "pF", help = "pF critical to analyse" )
-parse.add_argument ("next24rain_treshold", type = float, metavar = "24rain", help = "next24rain_treshold to analyse")
-parse.add_argument ("VPD_treshold", type = float, metavar = "VPD", help = "VPD_treshold to analyse")
+parser = argparse.ArgumentParser (description = "insert data")
+parser.add_argument ("latitude", type = float, metavar = "lat", help = "latitude to analyse")
+parser.add_argument ("longitude", type = float, metavar = "lon", help = "longitude to analyse")
+parser.add_argument ("soiltype", type = int, metavar = "stype", help = "soil type to analyse")
+parser.add_argument ("pFCritical", type = float, metavar = "pF", help = "pF critical to analyse" )
+parser.add_argument ("next24rain_treshold", type = float, metavar = "24rain", help = "next24rain_treshold to analyse")
+parser.add_argument ("VPD_treshold", type = float, metavar = "VPD", help = "VPD_treshold to analyse")
 
 #The endpoint (Group 3) develops an API to collect data from user with argparse:
 #Latitude - in decimal degrees
@@ -31,7 +31,7 @@ parse.add_argument ("VPD_treshold", type = float, metavar = "VPD", help = "VPD_t
 #VPD_treshold - 0.5
 
 try:
-     arguments = parse.parse_args() 
+     arguments = parser.parse_args() 
 except argparse.ArgumentError:
     print('Catching an argumentError')
 
