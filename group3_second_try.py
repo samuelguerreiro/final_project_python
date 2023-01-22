@@ -7,12 +7,12 @@ import group1_output
 #import group2_output #falta criar este ficheiro ainda (para a pergunta 4)
 
 parser = argparse.ArgumentParser (description = "insert data")
-parser.add_argument ("latitude", type = float, metavar = "lat", help = "latitude to analyse")
-parser.add_argument ("longitude", type = float, metavar = "lon", help = "longitude to analyse")
-parser.add_argument ("soiltype", type = int, metavar = "stype", help = "soil type to analyse")
-parser.add_argument ("pFCritical", type = float, metavar = "pF", help = "pF critical to analyse" )
-parser.add_argument ("next24rain_treshold", type = float, metavar = "rain", help = "next24rain_treshold to analyse")
-parser.add_argument ("VPD_treshold", type = float, metavar = "VPD", help = "VPD_treshold to analyse")
+parser.add_argument ("latitude", type = float, metavar = "--lat", help = "latitude to analyse")
+parser.add_argument ("longitude", type = float, metavar = "--lon", help = "longitude to analyse")
+parser.add_argument ("soiltype", type = int, metavar = "--stype", help = "soil type to analyse")
+parser.add_argument ("pFCritical", type = float, metavar = "--pF", help = "pF critical to analyse" )
+parser.add_argument ("next24rain_treshold", type = float, metavar = "--rain", help = "next24rain_treshold to analyse")
+parser.add_argument ("VPD_treshold", type = float, metavar = "--VPD", help = "VPD_treshold to analyse")
 
 #The endpoint (Group 3) develops an API to collect data from user with argparse:
 #Latitude - in decimal degrees
@@ -57,7 +57,7 @@ innext24h_rain_treshold   = arguments.rain # replace this value with what you co
 
 # 2 - Create a dictionary of weather forecast with the group1 work. In the meantime you can use material.Output1Group1 as a mockup result
 Forecast = group1_output.getHourlyWeatherForescast(inLat,inLon) #(output 1 vai devolver o dicionário; em material.py está o output que é suposto o grupo 1 mobter, podem,os usalo))
-#print (Forecast)
+print (Forecast)
 
 # 3 - Organize your data series
 dates = Forecast['hourly']['time']
