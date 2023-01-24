@@ -1,8 +1,8 @@
+# Group2 is responsible to provide a function with the calculation of Soil Tension equation (van Genuchten, 1980) 
 # The function should be independent of external modules (e.g. endpoint should not need to import material.py module).
 # material.py provides the pF equation as van Genuchten (Further reading of van Genuchten equation : https://bit.ly/3V2RPT6 )
-import math
-def get_pF_forecast(Theta,soilType):
 
+import math
 
 Output1Group1 = {"latitude":37.64,"longitude":-7.6600003,"generationtime_ms":1.3810396194458008,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":53.0,
        "current_weather":{"temperature":14.7,"windspeed":3.3,"winddirection":193.0,"weathercode":1,"time":"2022-12-15T11:00"},
@@ -53,23 +53,23 @@ def get_pF(Theta, alpha, Thetar, Thetas,nSoil):
         pF = 0
     else:
         pF=math.log(psi,10)
-
+    
     return pF
 
 
 def get_pF_forecast(VWC,soilType):
     """calculates soil tension (pF) for a given list of Volumetric Water Content and soil type
+
     Args:
-        Theta (list): Volumetric Soil Content
         VWC (list): Volumetric Water Content
         soilType (integer): 1-5 FAO class (1-coarse, 2-Medium, 3-Medium-Fine, 4-Fine, 5-Very Fine)
+
     Returns:
         list: soil tension (pF) 
     """
     #use the material module provided to access function formula and soil parameters
     # calculate pF
     soil_pF =[]
-
     alpha = float(soils[soilType]['alpha'])
     Thetar = float(soils[soilType]['thetar'])
     Thetas = float(soils[soilType]['thetas'])
