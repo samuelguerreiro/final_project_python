@@ -6,6 +6,7 @@ import argparse #tb existe o matplotlib._api mas não é para user, é para geri
 #argparse é argument parse e usamos p tratar o imput dado pelo utilizador
 import group1_output
 #import group2_output #falta criar este ficheiro ainda (para a pergunta 4)Samuel
+import math
 
 parse = argparse.ArgumentParser (description = "insert data") #criar o parser ("separador/analisador"); serve para o utilizador saber os dados que deve dar e depois tratá-los; p o utilzarod r«perceber o que é necessário
 parse.add_argument ("latitude", type = float, metavar = "lat", help = "latitude to analyse") # a msg do help aparece quando o utilizador na powershell o colicita, com "-h"; escrever "python group3_SAMUEL_try.py -h" para visualizar
@@ -36,6 +37,7 @@ try:# para tentar correr o codigo dentro do try e gerar uma exceção se o progr
 except argparse.ArgumentError:
     print('Catching an argumentError')
 
+#substituimos valores com o que guarsamos do parser ( o que o utilizador nos fornceceu); o in é input:
 inLat                     = arguments.latitude # replace this value with what you collect with your API
 inLon                     = arguments.longitude # replace this value with what you collect with your API
 inSoilType                = arguments.soiltype # replace this value with what you collect with your API
@@ -59,18 +61,20 @@ innext24h_rain_treshold   = arguments.next24rain_treshold # replace this value w
 # 2 - Create a dictionary of weather forecast with the group1 work. In the meantime you can use material.Output1Group1 as a mockup result
 Forecast = group1_output.getHourlyWeatherForescast(inLat,inLon) #(output 1 vai devolver o dicionário; em material.py está o output que é suposto o grupo 1 mobter, podem,os usalo))
 print (Forecast)
+#inlat e inlon são dados pelo utilizador. estamos ausar a função criada pelo grupo 1 para fazer um dicionário personalizado para os imputs que recebermos do tuilizador
 
 # 3 - Organize your data series
-dates = Forecast['hourly']['time']
-dates = list(map(lambda x: x[-8:-3], dates))# just to get the Day and Hour
+dates = Forecast['hourly']['time'] #entra no dicionário com duas chaves, hora e tempo; as fduas são necessarias p+ chegar ao valor certo, pq 1h tem varios minutos
+dates = list(map(lambda x: x[-8:-3], dates))# just to get the Day and Hour; ficaria no formato 18T14, sendo 18 o dia e 14 os minutos, como vemos no output (ver figura no end.point fornecido pelo prof e convem po -la na apresentação); percorre os valores e corta-os entre as posições -3 e -8 da propria variável (i.e. vai a cada uma das posições e guarda-as recortadas)
 #... continue to create the following lists and populate them with forecasted data
 temp = Forecast['temperature'] # replace the empty list with result of group1 work
 vpd = Forecast['vapor_pressure_deficit'] # replace the empty list with result of group1 work
-rh = Forecast['relativehumidity_2m'][:] # replace the empty list with result of group1 work
+rh = Forecast['relativehumidity_2m'] # replace the empty list with result of group1 work
 ETo = Forecast['et0_fao_evapotranspiration'] # replace the empty list with result of group1 work
-precipitation = Forecast['precipitation'][:] # replace the empty list with result of group1 work
-SoilMoisture_3_9 = Forecast['soil_moisture_3_9cm'][:] # replace the empty list with result of group1 work
-SoilMoisture_9_27 = Forecast['soil_moisture_9_27cm'][:] # replace the empty list with result of group1 work
+precipitation = Forecast['precipitation'] # replace the empty list with result of group1 work
+SoilMoisture_3_9 = Forecast['soil_moisture_3_9cm'] # replace the empty list with result of group1 work
+SoilMoisture_9_27 = Forecast['soil_moisture_9_27cm'] # replace the empty list with result of group1 work
+Soils = Forecast["soils"] [inSoilType] #criamos um dicionario para as carateristicas do tipo de solo que recebemos como argumento do utilizador
 
 
 # 4 Use group2 function to create the soil tension (pF) dataseries for the two soil layers. 
@@ -88,19 +92,46 @@ plan_9_27_dates = [] # leave as is. This list will store the irrigation event fo
 # Decision algorithm to trigger irrigation event - Improve if you feel it nees improvement
 # Rules: 1) soil tension is higher than pFCritical, 2) VPD is higher than vpd_treshold, 3) the sum of rain in the next 24 hours is less than 1 liter per m2
 
+#foi retirado do materiual.py e serve p calcular o pF de cada tipo de solo:
+def get_mSoil(nSoil):
+    return 1-1/nSoil
+def get_pF(Theta, alpha, Thetar, Thetas,nSoil ):
+    mSoil=get_mSoil(nSoil)
+    psi_part1 = 1/alpha
+    if ((Theta  - Thetar)/(Thetas-Thetar)) <0:
+        return (4.2)    
+    psi=(1/alpha)*((((Theta-Thetar)/(Thetas-Thetar))**(-1/mSoil))-1)**(1/nSoil)
+    if ( psi <= 0):
+        pF = 0
+    else:
+        pF=math.log(psi,10)
+    
+    return pF
+
+# criamos as listas com os niveis de pF para cada uma das prof. recorrendo a função para este caçlculo dispo. p prof.; o indice que usamos é a posição de cada uma das datas na sua lista:
+# resultado supostamente obtido pelo grupo 2 (não tinhamos de o fazer):
+pF_3_9 = []
+for i in range(0, len(dates)):
+    pF_3_9 [i] = get_pF(SoilMoisture_3_9[i], Forecast["soils"] [inSoilType] ["alpha"],  Forecast["soils"] [inSoilType] ["thetar"],  Forecast["soils"] [inSoilType] ["thetas"],  Forecast["soils"] [inSoilType] ["nsoil"])
+
+pF_9_27 = []
+for i in range(0, len(dates)):
+    pF_9_27 [i] = get_pF(SoilMoisture_9_27[i], Forecast["soils"] [inSoilType] ["alpha"],  Forecast["soils"] [inSoilType] ["thetar"],  Forecast["soils"] [inSoilType] ["thetas"],  Forecast["soils"] [inSoilType] ["nsoil"])
+
+
 for idx,i in enumerate(vpd):
     next24_rain = sum(precipitation[idx:idx+24])
     if pF_3_9[idx]>=inpFCritical and vpd[idx] > invpd_treshold and next24_rain < innext24h_rain_treshold:
         if sum(filter(None, plan_3_9))<1:
             plan_3_9[idx] = 1
-            plan_3_9_dates.append(dates[idx])
+            plan_3_9_dates.append(dates[idx]) #fazemos o planeamento das proximas regas; no grafico a linha a vermelha é a posição 0 desta listya (i.e. a próxima)
     if pF_9_27[idx]>=inpFCritical and vpd[idx] > invpd_treshold and next24_rain < innext24h_rain_treshold:
          if sum(filter(None, plan_9_27))<1:
             plan_9_27[idx] = 1
             plan_9_27_dates.append(dates[idx])
 
-
-
+# o codigo abaixo dá as imagens que esta no end.point_ressult (usar isso). mostrar o schema e dizer no fim o que aprendemos com isto: com determoinadas funções e impuits de dados reauis com«nseguimos planear e visualizar graficamente resoluções para problemas quotidiano.
+# na intro dizer o objetivo (tratar dados e visualizar, mostrando o schema)
 
 
             # you don't want to worry about this section - only that it needs the variables
