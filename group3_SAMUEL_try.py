@@ -1,17 +1,17 @@
 import matplotlib.pyplot as plt
-from matplotlib.ticker import (MultipleLocator)
+from matplotlib.ticker import (MultipleLocator) #para localizar e formatar o desenho de uma função
 import numpy as np
-import material
-import argparse
+import material #output dop grupo 1 antes o receber
+import argparse #tb existe o matplotlib._api mas não é para user, é para gerir a API (argparse é p dados do utilizador, para criar apenas, não gere)
+#argparse é argument parse e usamos p tratar o imput dado pelo utilizador
 import group1_output
-#import group2_output #falta criar este ficheiro ainda (para a pergunta 4)
-input("escreva o nome:")
+#import group2_output #falta criar este ficheiro ainda (para a pergunta 4)Samuel
 
-parse = argparse.ArgumentParser (description = "insert data")
-parse.add_argument ("latitude", type = float, metavar = "lat", help = "latitude to analyse")
+parse = argparse.ArgumentParser (description = "insert data") #criar o parser ("separador/analisador"); serve para o utilizador saber os dados que deve dar e depois tratá-los; p o utilzarod r«perceber o que é necessário
+parse.add_argument ("latitude", type = float, metavar = "lat", help = "latitude to analyse") # a msg do help aparece quando o utilizador na powershell o colicita, com "-h"; escrever "python group3_SAMUEL_try.py -h" para visualizar
 parse.add_argument ("longitude", type = float, metavar = "lon", help = "longitude to analyse")
-parse.add_argument ("soiltype", type = int, metavar = "stype", help = "soil type to analyse")
-parse.add_argument ("pFCritical", type = float, metavar = "pF", help = "pF critical to analyse" )
+parse.add_argument ("soiltype", type = int, metavar = "stype", help = "soil type to analyse: 1-coarse, 2-medium, 3-medium-fine, 4-fine, 5-very fine") 
+parse.add_argument ("pFCritical", type = float, metavar = "pF", help = "pF critical to analyse")
 parse.add_argument ("next24rain_treshold", type = float, metavar = "24rain", help = "next24rain_treshold to analyse")
 parse.add_argument ("VPD_treshold", type = float, metavar = "VPD", help = "VPD_treshold to analyse")
 
@@ -31,7 +31,7 @@ parse.add_argument ("VPD_treshold", type = float, metavar = "VPD", help = "VPD_t
 #Next24Rain_treshold - 2
 #VPD_treshold - 0.5
 
-try:
+try:# para tentar correr o codigo dentro do try e gerar uma exceção se o programa falhar/não conseguir abrir os argumentos
      arguments = parse.parse_args() 
 except argparse.ArgumentError:
     print('Catching an argumentError')
@@ -43,7 +43,7 @@ if inSoilType < 1 and inSoilType > 5: #acrescentamos este if para que só corra 
     raise TypeError ("The soil type is not valid")
     exit()
 
-inpFCritical              = arguments.pFcritical # replace this value with what you collect with your API
+inpFCritical              = arguments.pFCritical # replace this value with what you collect with your API
 invpd_treshold            = arguments.VPD_treshold # replace this value with what you collect with your API
 innext24h_rain_treshold   = arguments.next24rain_treshold # replace this value with what you collect with your API
 
