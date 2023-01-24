@@ -4,6 +4,7 @@ import numpy as np
 import material
 import argparse
 import group1_output
+import group2_output
 #import group2_output #falta criar este ficheiro ainda (para a pergunta 4)
 
 parser = argparse.ArgumentParser (description = "insert data")
@@ -75,8 +76,8 @@ SoilMoisture_9_27 = Forecast['soil_moisture_9_27cm'][:] # replace the empty list
 # 4 Use group2 function to create the soil tension (pF) dataseries for the two soil layers. 
 
 #####O que está abaixo ainda falta o output, por isso comentámos. depois do output tirar o cardinal
-#pF_3_9= group2_output.get_pF_forecast(SoilMoisture_3_9, inSoilType) # replace the empty list with result of group2 work
-#pF_9_27= group2_output.get_pF_forecast(SoilMoisture_9_27, inSoilType) # replace the empty list the list with result of group2 work
+pF_3_9= group2_output.get_pF_forecast(SoilMoisture_3_9, inSoilType) # replace the empty list with result of group2 work
+pF_9_27= group2_output.get_pF_forecast(SoilMoisture_9_27, inSoilType) # replace the empty list the list with result of group2 work
 
 #Decision to irrigate ( 3-9 cm)
 plan_3_9 = [0] * len(dates) # replace the empty list with a list with same nr elements as 'dates', but filled with zeros
