@@ -5,7 +5,6 @@ import material
 import argparse
 import group1_output
 import group2_output
-#import group2_output #falta criar este ficheiro ainda (para a pergunta 4)
 
 parser = argparse.ArgumentParser ()
 parser.add_argument ("--latitude", type = float, required = True)
@@ -40,16 +39,16 @@ inpFCritical              = args.pFCritical # replace this value with what you c
 invpd_treshold            = args.vpd_treshold # replace this value with what you collect with your API
 innext24h_rain_treshold   = args.next24rain_treshold # replace this value with what you collect with your API
 
-# 1 -Organize your user input data for easier reading (isto é o que vem do imput)
-#inLat                     = 37.64 # replace this value with what you collect with your API
-#inLon                     = -7.66 # replace this value with what you collect with your API
-#inSoilType                = 1 # replace this value with what you collect with your API
-#inpFCritical              = 3.1 # replace this value with what you collect with your API
-#invpd_treshold            = 0.5 # replace this value with what you collect with your API
-#innext24h_rain_treshold   = 2 # replace this value with what you collect with your API
+# 1 -Organize your user input data for easier reading
+#inLat                     = 37.64
+#inLon                     = -7.66
+#inSoilType                = 1
+#inpFCritical              = 3.1
+#invpd_treshold            = 0.5
+#innext24h_rain_treshold   = 2
 
 # 2 - Create a dictionary of weather forecast with the group1 work. In the meantime you can use material.Output1Group1 as a mockup result
-Forecast = group1_output.getHourlyWeatherForescast(inLat,inLon) #(output 1 vai devolver o dicionário; em material.py está o output que é suposto o grupo 1 mobter, podem,os usalo))
+Forecast = group1_output.getHourlyWeatherForescast(inLat,inLon)
 #print (Forecast)
 
 # 3 - Organize your data series
@@ -69,7 +68,7 @@ SoilMoisture_9_27 = SoilMoisture_9_27[:]
 
 # 4 Use group2 function to create the soil tension (pF) dataseries for the two soil layers. 
 
-#####O que está abaixo ainda falta o output, por isso comentámos. depois do output tirar o cardinal
+
 pF_3_9= group2_output.get_pF_forecast(SoilMoisture_3_9, str(inSoilType)) # replace the empty list with result of group2 work
 pF_9_27= group2_output.get_pF_forecast(SoilMoisture_9_27, str(inSoilType)) # replace the empty list the list with result of group2 work
 
